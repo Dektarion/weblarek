@@ -1,23 +1,18 @@
 import { IBuyer, TPayment, TErrors } from '../../types/index.ts';
 
 export class Buyer {
-    protected _payment: TPayment;
-    protected _email: string;
-    protected _phone: string;
-    protected _address: string;
+    protected _payment: TPayment = '';
+    protected _email: string = '';
+    protected _phone: string = '';
+    protected _address: string = '';
 
-    constructor(buyer: IBuyer = {payment: '', email: '', phone: '', address: ''}) {
-        this._payment = buyer.payment;
-        this._email = buyer.email;
-        this._phone = buyer.phone;
-        this._address = buyer.address;
-    };
+    constructor() {};
 
-    setOrderInformation(orderInfo: IBuyer): void {
-        if (!this._payment) {this._payment = orderInfo.payment};
-        if (!this._email) {this._email = orderInfo.email};
-        if (!this._phone) {this._phone = orderInfo.phone};
-        if (!this._address) {this._address = orderInfo.address};
+    setOrderInformation(orderInfo: Partial<IBuyer>): void {
+        if (orderInfo.payment !== undefined) this._payment = orderInfo.payment;
+        if (orderInfo.email !== undefined) this._email = orderInfo.email;
+        if (orderInfo.phone !== undefined) this._phone = orderInfo.phone;
+        if (orderInfo.address !== undefined) this._address = orderInfo.address;
     };
 
     getOrderInformation(): IBuyer {

@@ -40,3 +40,8 @@ export type TRequestForServer = IBuyer & {
     total: number,
     items: string[]
 };
+
+export type TResponseFromSerever = {
+    id: string,
+    total: number
+};

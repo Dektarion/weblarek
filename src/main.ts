@@ -6,25 +6,21 @@ import { Buyer } from './components/models/Buyer.ts';
 import { apiProducts } from './utils/data.ts';
 import { Api } from './components/base/Api.ts';
 import { API_URL } from './utils/constants.ts';
-import { Communication } from './components/base/Communication.ts';
+import { Communication } from './components/api/Communication.ts';
 
 const productCatalog = new ProductCatalog();
 productCatalog.setProductList(apiProducts.items);
 productCatalog.setSelectedProduct(apiProducts.items[3]);
 
 const cart = new Cart();
-for (let n: number = 0; n < 4; n++) {
-  for (let i: number = 0; i < 4; i++) {
-    cart.addToCart(apiProducts.items[i]);
-  };
+for (let i: number = 0; i < 4; i++) {
+  cart.addToCart(apiProducts.items[i]);
 };
 
 const buyer = new Buyer();
 
 const api = new Api(API_URL);
 const communicationApi = new Communication(api);
-const responseFromServer = await communicationApi.get();
-productCatalog.setProductList(responseFromServer.items);
 
 console.log('Массив товаров из каталога:', productCatalog.getProductList());
 console.log('Товар из каталога по ID:', productCatalog.getProductById(apiProducts.items[2].id));
@@ -48,15 +44,19 @@ console.log('Товар из корзины по ID:', cart.checkProductInCartBy
 cart.clearCart();
 console.log('Корзина после очистки:', cart.getListFromCart());
 
-console.log('Первичная проверка объекта покупателя:', buyer.getOrderInformation());
+console.log('1-я проверка объекта покупателя:', buyer.getOrderInformation());
+buyer.setOrderInformation({email: '123@ya.ru', phone: '+79223458734'});
+console.log('2-я проверка объекта покупателя с мок-данными:', buyer.getOrderInformation());
 buyer.setOrderInformation({email: '123@ya.ru', phone: '+79223458734', address: 'г. Пушкино, ул. Колотушкино', payment: 'cash'});
-console.log('Вторичная проверка объекта покупателя с мок-данными:', buyer.getOrderInformation());
+console.log('3-я проверка объекта покупателя с мок-данными:', buyer.getOrderInformation());
+buyer.setOrderInformation({email: '', payment: ''});
+console.log('4-я проверка объекта покупателя с мок-данными:', buyer.getOrderInformation());
 buyer.clearOrderInformation();
-console.log('Первичная проверка объекта покупателя после очистки:', buyer.getOrderInformation());
+console.log('Проверка объекта покупателя после очистки:', buyer.getOrderInformation());
 buyer.setOrderInformation({email: '123@ya.ru', phone: '', address: '', payment: 'cash'});
-console.log('3-я проверка объекта покупателя при добавлении части полей:', buyer.getOrderInformation());
+console.log('5-я проверка объекта покупателя при добавлении части полей:', buyer.getOrderInformation());
 buyer.setOrderInformation({email: '', phone: '+79333458734', address: 'г. Колотушкино, ул. Пушкина', payment: ''});
-console.log('4-я проверка объекта покупателя при добавлении части полей:', buyer.getOrderInformation());
+console.log('6-я проверка объекта покупателя при добавлении части полей:', buyer.getOrderInformation());
 
 buyer.clearOrderInformation();
 console.log('1-я проверка валидации', buyer.validationOrderInformation());
@@ -69,5 +69,9 @@ console.log('4-я проверка валидации', buyer.validationOrderInf
 buyer.setOrderInformation({email: '123@ya.ru', phone: '+79333458734', address: 'г. Колотушкино, ул. Пушкина', payment: 'card'});
 console.log('4-я проверка валидации', buyer.validationOrderInformation());
 
-console.log('1-й тест обращения к серверу за данными по API:', await communicationApi.get());
+
+console.log('1-й тест обращения к серверу за данными по API:', await communicationApi.getProductsFromServer().catch((error) => console.error(error)));
+
+const responseFromServer = await communicationApi.getProductsFromServer();
+productCatalog.setProductList(responseFromServer.items);
 console.log('2-й тест API, каталог данных из сервера записан в модель для хранения данных:', productCatalog.getProductList());

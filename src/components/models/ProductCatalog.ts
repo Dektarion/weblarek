@@ -1,12 +1,10 @@
 import { IProduct } from '../../types/index.ts';
 
 export class ProductCatalog {
-	protected _productList: IProduct[];
+	protected _productList: IProduct[] = [];
 	protected _selectedProduct!: IProduct;
 
-	constructor(productList: IProduct[] = []) {
-		this._productList = productList;
-	}
+	constructor() {};
 
 	setProductList(productListArr: IProduct[]): void {
 		this._productList = productListArr;
