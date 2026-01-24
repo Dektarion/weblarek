@@ -6,7 +6,7 @@ export class Communication {
 
   constructor(api: Api) {
     this._api = api;
-  }
+  };
 
   get(): Promise<TProductList> {
     return this._api.get('/product/');
