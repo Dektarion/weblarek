@@ -176,4 +176,4 @@ Presenter - презентер содержит основную логику п
 `setOrderInformation(orderInfo: IBuyer): void` - метод сохранения данных покупателя для заказа;
 `getOrderInformation(): IBuyer` - метод получения данных покупателя для заказа;
 `clearOrderInformation(): void` - метод очистки данных покупателя для заказа;
-`validationOrderInformation(orderInfo: IBuyer): TErrors` - метод валидации полей информации для заказа на корректность заполнения / указания.
+`validationOrderInformation(): TErrors` - метод валидации полей информации для заказа на корректность заполнения / указания.

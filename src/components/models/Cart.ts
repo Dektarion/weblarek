@@ -3,7 +3,7 @@ import { IProduct } from '../../types/index.ts';
 export class Cart {
 	protected _purchaseProductList: IProduct[];
 
-	constructor(purchaseProductList: IProduct[]) {
+	constructor(purchaseProductList: IProduct[] = []) {
 		this._purchaseProductList = purchaseProductList;
 	}
 

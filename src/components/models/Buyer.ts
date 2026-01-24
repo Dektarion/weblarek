@@ -6,7 +6,7 @@ export class Buyer {
     protected _phone: string;
     protected _address: string;
 
-    constructor(buyer: IBuyer) {
+    constructor(buyer: IBuyer = {payment: '', email: '', phone: '', address: ''}) {
         this._payment = buyer.payment;
         this._email = buyer.email;
         this._phone = buyer.phone;
@@ -37,17 +37,17 @@ export class Buyer {
     };
 
 
-    validationOrderInformation(orderInfo: IBuyer): TErrors {
+    validationOrderInformation(): TErrors {
         const errors: TErrors = {
             payment: null,
             email: null,
             phone: null,
             address: null
         };
-        if (!orderInfo.payment) {errors.payment = 'Не выбран способ оплаты'};
-        if (!orderInfo.address) {errors.address = 'Не указан адрес доставки'};
-        if (!orderInfo.email) {errors.email = 'Не указан корректный email'};
-        if (!orderInfo.phone) {errors.phone = 'Не указан номер телефона'};
+        if (!this._payment) {errors.payment = 'Не выбран способ оплаты'};
+        if (!this._address) {errors.address = 'Не указан адрес доставки'};
+        if (!this._email) {errors.email = 'Не указан корректный email'};
+        if (!this._phone) {errors.phone = 'Не указан номер телефона'};
         return errors;
     };
 };

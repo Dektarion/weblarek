@@ -4,7 +4,7 @@ export class ProductCatalog {
 	protected _productList: IProduct[];
 	protected _selectedProduct!: IProduct;
 
-	constructor(productList: IProduct[]) {
+	constructor(productList: IProduct[] = []) {
 		this._productList = productList;
 	}
 
