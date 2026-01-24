@@ -4,6 +4,9 @@ import { ProductCatalog } from './components/models/ProductCatalog.ts';
 import { Cart } from './components/models/Cart.ts';
 import { Buyer } from './components/models/Buyer.ts';
 import { apiProducts } from './utils/data.ts';
+import { Api } from './components/base/Api.ts';
+import { API_URL } from './utils/constants.ts';
+import { Communication } from './components/base/Communication.ts';
 
 const productCatalog = new ProductCatalog();
 productCatalog.setProductList(apiProducts.items);
@@ -61,3 +64,14 @@ buyer.setOrderInformation({email: '123@ya.ru', phone: '+79333458734', address: '
 console.log('4-я проверка валидации', buyer.validationOrderInformation());
 buyer.setOrderInformation({email: '123@ya.ru', phone: '+79333458734', address: 'г. Колотушкино, ул. Пушкина', payment: 'card'});
 console.log('4-я проверка валидации', buyer.validationOrderInformation());
+
+const api = new Api(API_URL);
+const communicationApi = new Communication(api);
+
+console.log('1-й тест обращения к серверу за данными по API:', await communicationApi.get());
+
+const responseFromServer = await communicationApi.get();
+
+productCatalog.setProductList(responseFromServer.items);
+
+console.log('2-й тест API, каталог данных из сервера записан в модель для хранения данных:', productCatalog.getProductList());

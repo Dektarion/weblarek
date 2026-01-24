@@ -6,7 +6,6 @@ export interface IApi {
 }
 
 export type TPayment = 'card' | 'cash' | '';
-
 export type TPrice = number | null;
 
 export type TErrors = {
@@ -32,3 +31,12 @@ export interface IBuyer {
     address: string;
 };
 
+export type TProductList = {
+    total: number,
+    items: IProduct[]
+};
+
+export type TRequestForServer = IBuyer & {
+    total: number,
+    items: string[]
+};
