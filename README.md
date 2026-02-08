@@ -60,7 +60,7 @@ Presenter - презентер содержит основную логику п
 Класс является дженериком и принимает в переменной `T` тип данных, которые могут быть переданы в метод `render` для отображения.
 
 Конструктор:
-`constructor(container: HTMLElement)` - принимает ссылку на DOM элемент за отображение, которого он отвечает.
+`constructor(container: HTMLElement)` - принимает ссылку на DOM элемент за отображение которого он отвечает.
 
 Поля класса:
 `container: HTMLElement` - поле для хранения корневого DOM элемента компонента.
@@ -189,3 +189,176 @@ Presenter - презентер содержит основную логику п
 Методы класса:
 `getProductsFromServer(): Promise<TProductList>` - выполняет GET запрос через класс Api на переданный в параметрах ендпоинт и возвращает Promise.json();
 `postOrderOnServer(request: TRequestForServer): Promise<TResponseFromSerever>` - принимает объект с данными через класс Api, которые будут переданы в JSON в тело запроса, и отправляет эти данные на ендпоинт переданный как параметр при вызове метода.
+
+### Слой Отображения
+
+#### Interface IHeaderData
+Интерфейс служит для типизация данных, переданных в `render` для отрисовки. Поля соответсвуют `set` классу `Header`.
+
+Поля интерфейса:
+`counter: number` - отображаемое число товаров в корзине.
+
+#### Class Header
+Класс - отвечает за отображение `HTMLElement <header>`. Наследуется от базового класса `Component` с указанием конкретного типа для данных, которые буду передваться в `render` - `<IHeaderData>`.
+
+Конструктор:
+`constructor(event: IEvents, container: HTLElement)` - принимает в конструктор объект Event и соответсвующий контейнер.
+
+Поля класса:
+`protected _counterElement: HTMLElement` - защищенное поле для хранения элемента счетчика товаров;
+`protected _cartButton: HTMLButtonElement` - защищенное поле для хранения элемента кнопки корзины.
+
+Методы класса:
+`set counter(value: number)` - сеттер, отрисовывающий в header кол-во товаров в корзине.
+
+#### Interface IMainGalleryData
+Интерфейс служит для типизация данных, переданных в `render` для отрисовки. Поля соответсвуют `set` классу `MainGallery`.
+
+Поля интерфейса:
+`catalog: HTMLElement[]` - отображаемые карточки товаров на главной странице.
+
+#### Class MainGallery
+Класс - отвечает за отображение `HTMLElement <main>`. Наследуется от базового класса `Component` с указанием конкретного типа для данных, которые буду передваться в `render` - `<IMainGalleryData>`.
+
+Конструктор:
+`constructor(container: HTLElement)` - принимает в конструктор объект Event и соответсвующий контейнер.
+
+Поля класса:
+`protected _galleryElement: HTMLElement` - защищенное поле для хранения основной галлереи (элемента).
+
+Методы класса:
+`set catalog(items: HTMLElement[])` - сеттер, отрисовывающий в основной галлереи карточки товаров.
+
+#### Interface IModalData
+Интерфейс служит для типизация данных, переданных в `render` для отрисовки. Поля соответсвуют `set` классу `Modal`.
+
+Поля интерфейса:
+`content: HTMLElement` - отображаемый контент (элементы) внутри модального окна.
+
+#### Class Modal
+Класс - отвечает за отображение `HTMLElement <div class='modal'>`. Наследуется от базового класса `Component` с указанием конкретного типа для данных, которые буду передваться в `render` - `<IModalData>`.
+
+Конструктор:
+`constructor(event: IEvents, container: HTLElement)` - принимает в конструктор объект Event и соответсвующий контейнер.
+
+Поля класса:
+`protected _closeButton: HTMLElement` - защищенное поле для хранения кнопки закрытия модального окна;
+`protected _modalContent: HTMLElement` - защищенное поле для хранения контента модального окна.
+
+Методы класса:
+`set content(item: HTMLElement)` - сеттер, отрисовывающий контент модального окна.
+
+#### Interface ISuccessfulData
+Интерфейс служит для типизация данных, переданных в `render` для отрисовки. Поля соответсвуют `set` классу `Successful`.
+
+Поля интерфейса:
+`summ: number` - отображаемая общая сумма покупки.
+
+#### Class Successful
+Класс - отвечает за отображение `HTMLElement <div class='order-success'>`. Наследуется от базового класса `Component` с указанием конкретного типа для данных, которые буду передваться в `render` - `<ISuccessfulData>`.
+
+Конструктор:
+`constructor(event: IEvents, container: HTLElement)` - принимает в конструктор объект Event и соответсвующий контейнер.
+
+Поля класса:
+`protected _newBuyButton: HTMLButtonElement` - защищенное поле для хранения кнопки "Новые покупки".
+
+Методы класса:
+`set content(value: number)` - сеттер, отрисовывающий общую сумму покупки в модальном окне.
+
+#### Interface ICartViewData
+Интерфейс служит для типизация данных, переданных в `render` для отрисовки. Поля соответсвуют `set` классу `CartView`.
+
+Поля интерфейса:
+`listOfPosition: HTMLElement[]` - отображаемый список покупок (карточек) в строчном формате;
+`summ: number` - отображаемая общая сумма покупки.
+
+#### Class CartView
+Класс - отвечает за отображение `HTMLElement <div class='basket'>`. Наследуется от базового класса `Component` с указанием конкретного типа для данных, которые буду передваться в `render` - `<ICartViewData>`.
+
+Конструктор:
+`constructor(event: IEvents, container: HTLElement)` - принимает в конструктор объект Event и соответсвующий контейнер.
+
+Поля класса:
+`protected _cartList: HTMLElement[]` - защищенное поле для хранения списка покупок (карточек) в строчном формате;
+`protected _cartPlaceOrderButton: HTMLButtonElement` - защищенное поле для хранения кнопки оформить заказ;
+`protected _orderSumm: HTMLElement` - защищенное поле для хранения поля обзей стоимости заказа.
+
+Методы класса:
+`set listOfPosition(items: HTMLElement[])` - сеттер, отрисовывающий список товаров (карточек в строчном виде) в корзине;
+`set summ(value: number)` - сеттер, отрисовывающий общую сумму покупки в модальном окне.
+
+#### abstract Class CardAbstract
+Класс - является родительским для 3-х классов отвечающих за отображение карточек товаров.
+
+Конструктор:
+`constructor(container: HTLElement)` - принимает в конструктор соответсвующий контейнер.
+
+Поля класса:
+`protected _titleElement: HTMLElement` - защищенное поле для хранения имени карточки;
+`protected _priceElement: HTMLElement` - защищенное поле для хранения стоимости товара в карточке.
+
+Методы класса:
+`set title(value: string)` - сеттер, отрисовывающий наименование товара в карточке;
+`set price(value: number)` - сеттер, отрисовывающий стоимость товара в карточке.
+
+#### Class CardCommon
+Класс - отвечает за отображение `HTMLElement <button class=' card'>` внутри основной галлереи. Наследуется от абстрактного класса `CardAbstract`.
+
+Конструктор:
+`constructor(container: HTMLElement, actions?: ICardActions)` - принимает в конструктур соответсвующий контейнер и опционально - объект с обработчиком.
+
+Поля класса:
+`protected _categoryElement: HTMLElement` - защищенное поле для хранения категории карточки;
+`protected _imageElement: HTMLImageElement` - защищенное поле для хранения изображения карточки.
+
+#### Class CardFull
+Класс - отвечает за отображение `HTMLElement <div class='card_full'>` при клике на карточку в галереи. Наследуется от абстрактного класса `CardAbstract`.
+
+Конструктор:
+`constructor()` - принимает пустой конструктур, вызывает родительский конструктор.
+
+Поля класса:
+`protected _category: string` - защищенное поле для хранения категории карточки;
+`protected _text: string` - защищенное поле для хранения описания карточки;
+`protected _imgSrc: string` - защищенное поле для хранения пути до изображения карточки;
+`protected _imgAlt: string` - защищенное поле для хранения наименования изображения;
+`protected _cartButton: HTMLButtonElement` - защищенное поле для хранения кнопки добавления в корзину товара.
+
+#### Class CardCompact
+Класс - отвечает за отображение `HTMLElement <li class='card_compact'>` карточки внутри корзины в упрощенном виде. Наследуется от абстрактного класса `CardAbstract`.
+
+Конструктор:
+`constructor()` - принимает пустой конструктур, вызывает родительский конструктор.
+
+Поля класса:
+`protected _index: number` - защищенное поле для хранения индекса / порядкового номера карточки в корзине;
+`protected _removeButton: HTMLButtonElement` - защищенное поле для хранения кнопки удаления товара из корзины.
+
+#### abstract Class Form
+Класс - является родительским для 2-х классов отвечающих за отображение формы подтверждения заказа.
+
+Конструктор:
+`constructor(event: IEvents, container: HTLElement)` - принимает в конструктор объект Event и соответсвующий контейнер.
+
+Поля класса:
+`protected _title: string` - защищенное поле для хранения лейбла заполняего поля;
+`protected _inputText: string` - защищенное поле для хранения введенных в input данных;
+`protected _errorMessage: string` - защищенное поле для хранения текста ошибки;
+`protected _nextButton: HTMLButtonElement` - защищенное поле для хранения кнопки дальнейшего перехода в окнах заказа.
+
+#### Class FormOrder
+Класс - отвечает за отображение `HTMLElement <form class='form' name='order'>` первой формы для заказа (способ оплаты и адрес). Наследуется от абстрактного класса `Form`.
+
+Конструктор:
+`constructor()` - принимает пустой конструктур, вызывает родительский конструктор.
+
+Поля класса:
+`protected _cardButton: HTMLButtonElement` - защищенное поле для хранения кнопки оплаты картой;
+`protected _cashButton: HTMLButtonElement` - защищенное поле для хранения кнопки оплаты наличными.
+
+#### Class FormContacts
+Класс - отвечает за отображение `HTMLElement <form class='form' name='contacts'>` второй формы для заказа (email & tel.). Наследуется от абстрактного класса `Form`.
+
+Конструктор:
+`constructor()` - принимает пустой конструктур, вызывает родительский конструктор.

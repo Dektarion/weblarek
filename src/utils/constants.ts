@@ -20,3 +20,10 @@ export const settings = {
 
 };
 
+/* Перечисление состояний событий */
+export enum EventState {
+  CART_OPEN = 'cart:open',
+  CART_CLOSE = 'cart:close',
+  MODAL_OPEN = 'modal:open',
+  MODAL_CLOSE = 'modal:close',
+};
