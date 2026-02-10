@@ -45,3 +45,7 @@ export type TResponseFromSerever = {
     id: string,
     total: number
 };
+
+export interface ICardActions {
+    onClick?: () => void;
+}

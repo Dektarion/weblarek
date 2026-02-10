@@ -5,7 +5,7 @@ interface IMainGalleryData {
   catalog: HTMLElement[];
 };
 
-export class MainGallery extends Component<IMainGalleryData> {
+export class MainGalleryUI extends Component<IMainGalleryData> {
   protected _galleryElement: HTMLElement;
 
   constructor(container: HTMLElement) {

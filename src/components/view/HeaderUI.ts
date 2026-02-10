@@ -7,7 +7,7 @@ interface IHeaderData {
   counter: number;
 };
 
-export class Header extends Component<IHeaderData> {
+export class HeaderUI extends Component<IHeaderData> {
   protected _counterElement: HTMLElement;
   protected _cartButton: HTMLButtonElement;
 
