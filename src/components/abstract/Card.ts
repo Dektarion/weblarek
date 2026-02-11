@@ -24,8 +24,8 @@ export abstract class Card<T> extends Component<T&TCardProps> {
     const stringValue = value === null
     ? priceLabels.free
     : value < 10000
-    ? `${String(value)} ${priceLabels.price}`
-    : `${value.toLocaleString('ru-RU')} ${priceLabels.price}`;
+    ? `${String(value)} ${priceLabels.label}`
+    : `${value.toLocaleString('ru-RU')} ${priceLabels.label}`;
 
     this._priceElement.textContent = stringValue;
   };

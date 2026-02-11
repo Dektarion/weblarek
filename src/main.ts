@@ -17,7 +17,7 @@ import { MainGalleryUI } from './components/view/MainGalleryUI.ts';
 import { ModalUI } from './components/view/ModalUI.ts';
 
 import { CardGalleryUI } from './components/view/CardGalleryUI.ts';
-import { TProductList } from './types/index.ts';
+import { IProduct, TProductList } from './types/index.ts';
 
 const api = new Api(API_URL);
 const communicationApi = new Communication(api);
@@ -35,6 +35,8 @@ const header = new HeaderUI(events, DOM_ELEMENTS.header);
 const main = new MainGalleryUI(DOM_ELEMENTS.main);
 const modal = new ModalUI(events, DOM_ELEMENTS.modal);
 
+console.log(productsCatalog.getProductList());
+
 events.on(EventState.CATALOG_CHANGED, () => {
   const cardsArr = productsCatalog.getProductList().map((product) => {
     const card = new CardGalleryUI(cloneTemplate(DOM_ELEMENTS.cardGalleryTemplate), {
@@ -46,9 +48,28 @@ events.on(EventState.CATALOG_CHANGED, () => {
   main.render({ catalog: cardsArr });
 });
 
+events.on(EventState.CARD_SELECTED, (product: IProduct) => {
+  productsCatalog.setSelectedProduct(product);
+
+  console.log(productsCatalog.getSelectedProduct());
+});
+
+// events.on(EventState.PRODUCT_BUY, () => {
+//     const selectedCard = productsCatalog.getProductList().map((product) => {
+//     const card = new CardGalleryUI(cloneTemplate(DOM_ELEMENTS.cardGalleryTemplate), {
+//       onClick: () => events.emit(EventState.CARD_SELECTED, product),
+//     });
+//     return card.render(product);
+//   });
+// }); // test console.log('!Купить товар!')
+
 events.emit(EventState.CATALOG_CHANGED);
 
-console.log(productsCatalog.getProductList());
+
+
+
+
+
 // DOM_ELEMENTS.main.replaceChildren(galleryCard.render());
 
 

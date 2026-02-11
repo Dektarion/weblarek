@@ -22,7 +22,7 @@ export const settings = {
 
 export const priceLabels = {
   free: 'Бесценно',
-  price: ' синопсов',
+  label: ' синопсов',
 }
 
 /* Перечисление состояний событий */
@@ -33,4 +33,5 @@ export enum EventState {
   MODAL_CLOSE = 'modal:close',
   CATALOG_CHANGED = 'catalog:changed',
   CARD_SELECTED = 'card:selected',
+  PRODUCT_BUY = 'product:buy',
 };
