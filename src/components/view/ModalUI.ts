@@ -23,6 +23,18 @@ export class ModalUI extends Component<IModalData> {
   };
 
   set content(item: HTMLElement) {
-    this._modalContent.append(item);
+    this._modalContent.replaceChildren(item);
+  };
+
+  setContent(item: HTMLElement) {
+    this._modalContent.replaceChildren(item);
+  };
+
+  open(): void {
+    this.container.classList.add('modal_active');
+  };
+
+  close(): void {
+    this.container.classList.remove('modal_active');
   };
 };

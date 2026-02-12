@@ -322,7 +322,7 @@ Presenter - презентер содержит основную логику п
 Конструктор:
 `constructor(container: HTMLElement, actions?: ICardActions)` - принимает в конструктур соответсвующий контейнер и опционально - объект с обработчиком.
 
-#### Class CardFullUI
+#### Class CardPreviewUI
 Класс - отвечает за отображение `HTMLElement <div class='card_full'>` при клике на карточку в галереи. Наследуется от абстрактного класса `CardAbstract`.
 
 Конструктор:

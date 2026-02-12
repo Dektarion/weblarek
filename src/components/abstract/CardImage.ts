@@ -19,7 +19,10 @@ export class CardImage extends Card<TCardGalleryProps> {
 
   set category(value: string) {
     this._categoryElement.textContent = value;
-    this._categoryElement.classList.add(categoryMap[value as keyof typeof categoryMap]);
+
+    for (const key in categoryMap) {
+      this._categoryElement.classList.toggle(categoryMap[key as keyof typeof categoryMap], key === value);
+    };
   };
 
   set image(value: string) {

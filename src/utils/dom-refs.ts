@@ -7,4 +7,5 @@ export const DOM_ELEMENTS = {
   main: document.querySelector('.gallery') as HTMLElement,
   modal: document.querySelector('.modal') as HTMLDivElement,
   cardGalleryTemplate: document.querySelector('#card-catalog') as HTMLTemplateElement,
+  cardPreviewTemplate: document.querySelector('#card-preview') as HTMLTemplateElement,
 } as const;

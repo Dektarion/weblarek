@@ -33,5 +33,6 @@ export enum EventState {
   MODAL_CLOSE = 'modal:close',
   CATALOG_CHANGED = 'catalog:changed',
   CARD_SELECTED = 'card:selected',
+  SELECTED_CARD_SAVE = 'selected-card:save',
   PRODUCT_BUY = 'product:buy',
 };
