@@ -17,9 +17,15 @@ export class CardPreviewUI extends CardImage {
     };
   };
 
-  // + 2 сеттера из треда в пачке;
-
   set description(value: string) {
     this._descriptionElement.textContent = value;
+  };
+
+  set textButton(value: string) {
+    this._cardButton.textContent = value;
+  };
+
+  set statusButton(value: boolean) {
+    this._cardButton.disabled = value;
   };
 };

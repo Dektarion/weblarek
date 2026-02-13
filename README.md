@@ -246,7 +246,9 @@ Presenter - презентер содержит основную логику п
 `protected _modalContent: HTMLElement` - защищенное поле для хранения контента модального окна.
 
 Методы класса:
-`set content(item: HTMLElement)` - сеттер, отрисовывающий контент модального окна.
+`set content(item: HTMLElement)` - сеттер, отрисовывающий контент модального окна;
+`open(): void` - метод открытия модального окна;
+`close(): void` - метод закрытия модального окна.
 
 #### Interface ISuccessfulData
 Интерфейс служит для типизация данных, переданных в `render` для отрисовки. Поля соответсвуют `set` классу `Successful`.
@@ -266,15 +268,15 @@ Presenter - презентер содержит основную логику п
 Методы класса:
 `set content(value: number)` - сеттер, отрисовывающий общую сумму покупки в модальном окне.
 
-#### Interface ICartViewData
-Интерфейс служит для типизация данных, переданных в `render` для отрисовки. Поля соответсвуют `set` классу `CartView`.
+#### Interface ICartData
+Интерфейс служит для типизация данных, переданных в `render` для отрисовки. Поля соответсвуют `set` классу `CartUI`.
 
 Поля интерфейса:
 `listOfPosition: HTMLElement[]` - отображаемый список покупок (карточек) в строчном формате;
 `summ: number` - отображаемая общая сумма покупки.
 
-#### Class CartView
-Класс - отвечает за отображение `HTMLElement <div class='basket'>`. Наследуется от базового класса `Component` с указанием конкретного типа для данных, которые буду передваться в `render` - `<ICartViewData>`.
+#### Class CartUI
+Класс - отвечает за отображение `HTMLElement <div class='basket'>`. Наследуется от базового класса `Component` с указанием конкретного типа для данных, которые буду передваться в `render` - `<ICartData>`.
 
 Конструктор:
 `constructor(event: IEvents, container: HTLElement)` - принимает в конструктор объект Event и соответсвующий контейнер.
@@ -282,7 +284,7 @@ Presenter - презентер содержит основную логику п
 Поля класса:
 `protected _cartList: HTMLElement[]` - защищенное поле для хранения списка покупок (карточек) в строчном формате;
 `protected _cartPlaceOrderButton: HTMLButtonElement` - защищенное поле для хранения кнопки оформить заказ;
-`protected _orderSumm: HTMLElement` - защищенное поле для хранения поля обзей стоимости заказа.
+`protected _orderSumm: HTMLElement` - защищенное поле для хранения поля общей стоимости заказа.
 
 Методы класса:
 `set listOfPosition(items: HTMLElement[])` - сеттер, отрисовывающий список товаров (карточек в строчном виде) в корзине;
@@ -323,17 +325,19 @@ Presenter - презентер содержит основную логику п
 `constructor(container: HTMLElement, actions?: ICardActions)` - принимает в конструктур соответсвующий контейнер и опционально - объект с обработчиком.
 
 #### Class CardPreviewUI
-Класс - отвечает за отображение `HTMLElement <div class='card_full'>` при клике на карточку в галереи. Наследуется от абстрактного класса `CardAbstract`.
+Класс - отвечает за отображение `HTMLElement <div class='card_full'>` при клике на карточку в галереи. Наследуется от класса `CardImage`.
 
 Конструктор:
-`constructor()` - принимает пустой конструктур, вызывает родительский конструктор.
+`constructor(container: HTMLElement, actions?: ICardActions)` - принимает контейнер для вызова родительского конструктора, опционально - события.
 
 Поля класса:
-`protected _category: string` - защищенное поле для хранения категории карточки;
-`protected _text: string` - защищенное поле для хранения описания карточки;
-`protected _imgSrc: string` - защищенное поле для хранения пути до изображения карточки;
-`protected _imgAlt: string` - защищенное поле для хранения наименования изображения;
-`protected _cartButton: HTMLButtonElement` - защищенное поле для хранения кнопки добавления в корзину товара.
+`protected _descriptionElement: HTMLParagraphElement` - защищенное поле для хранения описания карточки;
+`protected _cardButton: HTMLButtonElement` - защищенное поле для хранения элемента кнопки покупки.
+
+Методы класса:
+`set description(value: string)` - сеттер, отрисовывающий описание товара в карточке;
+`set textButton(value: string)` - сеттер, отрисовывающий надпись на кнопке в карточке;
+`set statusButton(value: boolean)` - сеттер, устанавливающий состояние кнопки (disabled / enabled).
 
 #### Class CardCompact
 Класс - отвечает за отображение `HTMLElement <li class='card_compact'>` карточки внутри корзины в упрощенном виде. Наследуется от абстрактного класса `CardAbstract`.

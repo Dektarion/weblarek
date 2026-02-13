@@ -1,9 +1,11 @@
 import { IProduct } from '../../types/index.ts';
+import { EventState } from '../../utils/constants.ts';
+import { IEvents } from '../base/Events.ts';
 
 export class Cart {
 	protected _purchaseProductList: IProduct[] = [];
 
-	constructor() {};
+	constructor(protected event: IEvents) {};
 
 	getListFromCart(): IProduct[] {
 		return this._purchaseProductList;
@@ -11,10 +13,12 @@ export class Cart {
 
 	addToCart(product: IProduct): void {
 		this._purchaseProductList.push(product);
+		this.event.emit(EventState.CART_CHANGED);
 	};
 
 	removeFromCart(product: IProduct): void {
 		this._purchaseProductList = this._purchaseProductList.filter((item: IProduct) => item.id !== product.id);
+		this.event.emit(EventState.CART_CHANGED);
 	};
 
 	clearCart(): void {

@@ -20,19 +20,26 @@ export const settings = {
 
 };
 
-export const priceLabels = {
+export const priceLabelsForCards = {
   free: 'Бесценно',
   label: ' синопсов',
-}
+};
+
+export const btnTextForModalCard = {
+  buy: 'Купить',
+  disabled: 'Недоступно',
+  delete: 'Удалить из корзины',
+};
 
 /* Перечисление состояний событий */
 export enum EventState {
   CART_OPEN = 'cart:open',
   CART_CLOSE = 'cart:close',
-  MODAL_OPEN = 'modal:open',
+  CART_CHANGED = 'cart:changed',
+  // MODAL_OPEN = 'modal:open',
   MODAL_CLOSE = 'modal:close',
   CATALOG_CHANGED = 'catalog:changed',
   CARD_SELECTED = 'card:selected',
   SELECTED_CARD_SAVE = 'selected-card:save',
-  PRODUCT_BUY = 'product:buy',
+  CARD_BTN_CLICK = 'card:click',
 };

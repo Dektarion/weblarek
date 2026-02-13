@@ -17,16 +17,16 @@ export class ModalUI extends Component<IModalData> {
     this._closeButton = ensureElement<HTMLElement>('.modal__close', this.container);
     this._modalContent = ensureElement<HTMLButtonElement>('.modal__content', this.container);
 
+    this.container.addEventListener('click', (event) => {
+      if (event.target === this.container) this.event.emit(EventState.MODAL_CLOSE);
+    });
+
     this._closeButton.addEventListener('click', () => {
       this.event.emit(EventState.MODAL_CLOSE);
     });
   };
 
   set content(item: HTMLElement) {
-    this._modalContent.replaceChildren(item);
-  };
-
-  setContent(item: HTMLElement) {
     this._modalContent.replaceChildren(item);
   };
 

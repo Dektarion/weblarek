@@ -1,7 +1,7 @@
 import { Component } from "../base/Component.ts";
 import { ensureElement } from "../../utils/utils.ts";
 import { IProduct } from "../../types/index.ts";
-import { priceLabels } from "../../utils/constants.ts";
+import { priceLabelsForCards } from "../../utils/constants.ts";
 
 export type TCardProps = Pick<IProduct, 'title' | 'price'>;
 
@@ -22,10 +22,10 @@ export abstract class Card<T> extends Component<T&TCardProps> {
 
   set price(value: number) {
     const stringValue = value === null
-    ? priceLabels.free
+    ? priceLabelsForCards.free
     : value < 10000
-    ? `${String(value)} ${priceLabels.label}`
-    : `${value.toLocaleString('ru-RU')} ${priceLabels.label}`;
+    ? `${String(value)} ${priceLabelsForCards.label}`
+    : `${value.toLocaleString('ru-RU')} ${priceLabelsForCards.label}`;
 
     this._priceElement.textContent = stringValue;
   };
