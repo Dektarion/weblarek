@@ -9,4 +9,7 @@ export const DOM_ELEMENTS = {
   cardGalleryTemplate: document.querySelector('#card-catalog') as HTMLTemplateElement,
   cardPreviewTemplate: document.querySelector('#card-preview') as HTMLTemplateElement,
   cart: document.querySelector('#basket') as HTMLTemplateElement,
+  productInCartTemplate: document.querySelector('#card-basket') as HTMLTemplateElement,
+  formOrder: document.querySelector('#order') as HTMLTemplateElement,
+  formContacts: document.querySelector('#contacts') as HTMLTemplateElement,
 } as const;

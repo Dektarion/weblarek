@@ -1,4 +1,6 @@
 import { IBuyer, TPayment, TErrors } from '../../types/index.ts';
+import { EventState } from '../../utils/constants.ts';
+import { IEvents } from '../base/Events.ts';
 
 export class Buyer {
     protected _payment: TPayment = '';
@@ -6,13 +8,15 @@ export class Buyer {
     protected _phone: string = '';
     protected _address: string = '';
 
-    constructor() {};
+    constructor(protected event: IEvents) {};
 
     setOrderInformation(orderInfo: Partial<IBuyer>): void {
         if (orderInfo.payment !== undefined) this._payment = orderInfo.payment;
         if (orderInfo.email !== undefined) this._email = orderInfo.email;
         if (orderInfo.phone !== undefined) this._phone = orderInfo.phone;
         if (orderInfo.address !== undefined) this._address = orderInfo.address;
+
+        this.event.emit(EventState.BUYER_CAHAGED, this.getOrderInformation());
     };
 
     getOrderInformation(): IBuyer {

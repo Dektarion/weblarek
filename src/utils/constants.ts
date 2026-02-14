@@ -34,12 +34,15 @@ export const btnTextForModalCard = {
 /* Перечисление состояний событий */
 export enum EventState {
   CART_OPEN = 'cart:open',
-  CART_CLOSE = 'cart:close',
+  // CART_CLOSE = 'cart:close',
   CART_CHANGED = 'cart:changed',
-  // MODAL_OPEN = 'modal:open',
-  MODAL_CLOSE = 'modal:close',
   CATALOG_CHANGED = 'catalog:changed',
   CARD_SELECTED = 'card:selected',
   SELECTED_CARD_SAVE = 'selected-card:save',
   CARD_BTN_CLICK = 'card:click',
+  MODAL_CLOSE = 'modal:close',
+  PRODUCT_REMOVE = 'product:remove',
+  ORDER_START = 'order:start',
+  FORM_EDIT = 'form:edit',
+  BUYER_CAHAGED = 'buyer:changed',
 };

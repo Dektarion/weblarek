@@ -17,28 +17,34 @@ import { MainGalleryUI } from './components/view/MainGalleryUI.ts';
 import { ModalUI } from './components/view/ModalUI.ts';
 
 import { CardGalleryUI } from './components/view/CardGalleryUI.ts';
-import { IProduct, TProductList } from './types/index.ts';
+import { IBuyer, IProduct, TProductList } from './types/index.ts';
 import { CardPreviewUI } from './components/view/CardPreviewUI.ts';
 import { CartUI } from './components/view/CartUI.ts';
+import { ProductInCartUI } from './components/view/ProductInCartUI.ts';
+import { FormOrderUI } from './components/view/FormOrderUI.ts';
 
 /* Экземпляры клсссов */
 const events = new EventEmitter();
 const api = new Api(API_URL);
 const communicationApi = new Communication(api);
 const productsCatalog = new ProductCatalog(events);
+const buyerModel = new Buyer(events);
 const cartModel = new Cart(events);
 
 const header = new HeaderUI(events, DOM_ELEMENTS.header);
 const main = new MainGalleryUI(DOM_ELEMENTS.main);
 const modal = new ModalUI(events, DOM_ELEMENTS.modal);
-const cart = new CartUI(cloneTemplate(DOM_ELEMENTS.cart));
+const cart = new CartUI(events, cloneTemplate(DOM_ELEMENTS.cart));
 
 const cardPreview = new CardPreviewUI(cloneTemplate(DOM_ELEMENTS.cardPreviewTemplate), {
-    onClick: () => events.emit(EventState.CARD_BTN_CLICK, productsCatalog.getSelectedProduct())
+  onClick: () => events.emit(EventState.CARD_BTN_CLICK, productsCatalog.getSelectedProduct())
 });
 
+const FormOrder = new FormOrderUI(events, cloneTemplate(DOM_ELEMENTS.formOrder));
 
-/* Обработчики событий*/
+
+
+/* Обработчики событий */
 events.on(EventState.CATALOG_CHANGED, () => {
   const cardsArr = productsCatalog.getProductList().map((product) => {
     const card = new CardGalleryUI(cloneTemplate(DOM_ELEMENTS.cardGalleryTemplate), {
@@ -56,7 +62,6 @@ events.on(EventState.CARD_SELECTED, (product: IProduct) => {
 
 events.on(EventState.SELECTED_CARD_SAVE, () => {
   const selectedProductCard = productsCatalog.getSelectedProduct();
-
   const cardModalRenderObject = {
     ...selectedProductCard,
     textButton: selectedProductCard.price === null
@@ -81,32 +86,75 @@ events.on(EventState.CARD_BTN_CLICK, (product: IProduct) => {
 
 events.on(EventState.CART_CHANGED, () => {
   console.log('список из корзины', cartModel.getListFromCart());
+
+  const selectedProductCard = productsCatalog.getSelectedProduct();
   const counter = cartModel.getTotalCartCount();
   const updTextButton = {
-    ...productsCatalog.getSelectedProduct(),
+    ...selectedProductCard,
     textButton: btnTextForModalCard.delete,
   };
 
+  const productListInCart = cartModel.getListFromCart();
+  const productListInCartArr = productListInCart.map((product: IProduct) => {
+    const productInCart = new ProductInCartUI(cloneTemplate(DOM_ELEMENTS.productInCartTemplate), {
+      onClick: () => events.emit(EventState.PRODUCT_REMOVE, product)
+    });
+    const productCard = {
+      ...product,
+      index: productListInCart.indexOf(product) + 1,
+    };
+    return productInCart.render(productCard);
+  });
+
+  const cartRenderObject = {
+    listOfPosition: productListInCartArr,
+    summ: cartModel.getTotalCartCost(),
+    statusButton: !Boolean(cartModel.getTotalCartCost()),
+  };
+  const cartRender = cart.render(cartRenderObject);
+
+  modal.render({ content: cartRender });
   cardPreview.render(updTextButton);
   header.render( { counter } );
-
 });
-
-
-
-
-
-
-
-
-
-
 
 events.on(EventState.CART_OPEN, () => {
+  if (cartModel.getTotalCartCount() === 0) {
+    modal.render({ content: cart.render({
+      listOfPosition: [],
+      summ: cartModel.getTotalCartCost(),
+      statusButton: !Boolean(cartModel.getTotalCartCost())
+    }) })
+  };
 
-  modal.render({ content: cart.render() });
   modal.open();
 });
+
+events.on(EventState.PRODUCT_REMOVE, (product: IProduct) => {
+  console.log('удаляемый продукт', product);
+  cartModel.removeFromCart(product);
+});
+
+events.on(EventState.ORDER_START, () => {
+  console.log('заказываем');
+
+
+  modal.render({ content: FormOrder.render() });
+
+});
+
+events.on(EventState.FORM_EDIT, (formInformation: Partial<IBuyer>) => {
+  buyerModel.setOrderInformation(formInformation);
+});
+
+events.on(EventState.BUYER_CAHAGED, (buyer) => {
+  FormOrder.render(buyer);
+  console.log(buyer);
+})
+
+
+
+
 
 
 events.on(EventState.MODAL_CLOSE, () => {;
@@ -134,7 +182,7 @@ events.on(EventState.MODAL_CLOSE, () => {;
 
 
 
-
+/* Запрос данных с сервера */
 try {
   const catalogOfProductsFromServer: TProductList = await communicationApi.getProductsFromServer();
   productsCatalog.setProductList(catalogOfProductsFromServer.items);

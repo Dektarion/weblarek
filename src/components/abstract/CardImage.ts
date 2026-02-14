@@ -4,7 +4,7 @@ import { IProduct } from "../../types/index.ts";
 import { categoryMap } from "../../utils/constants.ts";
 import { CDN_URL } from "../../utils/constants.ts";
 
-export type TCardGalleryProps = Pick<IProduct, 'image' | 'category'>;
+type TCardGalleryProps = Pick<IProduct, 'image' | 'category'>;
 
 export class CardImage extends Card<TCardGalleryProps> {
   protected _categoryElement: HTMLElement;

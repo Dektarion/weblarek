@@ -8,13 +8,13 @@ interface IHeaderData {
 };
 
 export class HeaderUI extends Component<IHeaderData> {
-  protected _counterElement: HTMLElement;
+  protected _counterElement: HTMLSpanElement;
   protected _cartButton: HTMLButtonElement;
 
   constructor(protected event: IEvents, container: HTMLElement) {
     super(container);
 
-    this._counterElement = ensureElement<HTMLElement>('.header__basket-counter', this.container);
+    this._counterElement = ensureElement<HTMLSpanElement>('.header__basket-counter', this.container);
     this._cartButton = ensureElement<HTMLButtonElement>('.header__basket', this.container);
 
     this._cartButton.addEventListener('click', () => {

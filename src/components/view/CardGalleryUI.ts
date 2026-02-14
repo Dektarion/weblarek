@@ -8,6 +8,6 @@ export class CardGalleryUI extends CardImage {
 
     if (actions?.onClick) {
       this.container.addEventListener('click', actions.onClick);
-    }
+    };
   };
 };
