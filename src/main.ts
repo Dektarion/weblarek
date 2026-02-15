@@ -5,7 +5,6 @@ import { cloneTemplate } from './utils/utils.ts';
 import { ProductCatalog } from './components/models/ProductCatalog.ts';
 import { Cart } from './components/models/Cart.ts';
 import { Buyer } from './components/models/Buyer.ts';
-import { apiProducts } from './utils/data.ts';
 import { Api } from './components/base/Api.ts';
 import { API_URL, EventState, btnTextForModalCard } from './utils/constants.ts';
 import { Communication } from './components/api/Communication.ts';
@@ -17,11 +16,13 @@ import { MainGalleryUI } from './components/view/MainGalleryUI.ts';
 import { ModalUI } from './components/view/ModalUI.ts';
 
 import { CardGalleryUI } from './components/view/CardGalleryUI.ts';
-import { IBuyer, IProduct, TProductList } from './types/index.ts';
+import { IBuyer, IProduct, TProductList, TResponseFromSerever } from './types/index.ts';
 import { CardPreviewUI } from './components/view/CardPreviewUI.ts';
 import { CartUI } from './components/view/CartUI.ts';
 import { ProductInCartUI } from './components/view/ProductInCartUI.ts';
 import { FormOrderUI } from './components/view/FormOrderUI.ts';
+import { FormContactsUI } from './components/view/FormContactsUI.ts';
+import { SuccessfulUI } from './components/view/SuccessfulUI.ts';
 
 /* Экземпляры клсссов */
 const events = new EventEmitter();
@@ -37,11 +38,12 @@ const modal = new ModalUI(events, DOM_ELEMENTS.modal);
 const cart = new CartUI(events, cloneTemplate(DOM_ELEMENTS.cart));
 
 const cardPreview = new CardPreviewUI(cloneTemplate(DOM_ELEMENTS.cardPreviewTemplate), {
-  onClick: () => events.emit(EventState.CARD_BTN_CLICK, productsCatalog.getSelectedProduct())
+  onClick: () => events.emit(EventState.BUY_CLICK, productsCatalog.getSelectedProduct())
 });
 
-const FormOrder = new FormOrderUI(events, cloneTemplate(DOM_ELEMENTS.formOrder));
-
+const formOrder = new FormOrderUI(events, cloneTemplate(DOM_ELEMENTS.formOrder));
+const formContacts = new FormContactsUI(events, cloneTemplate(DOM_ELEMENTS.formContacts));
+const success = new SuccessfulUI(events, cloneTemplate(DOM_ELEMENTS.successful));
 
 
 /* Обработчики событий */
@@ -77,7 +79,7 @@ events.on(EventState.SELECTED_CARD_SAVE, () => {
   modal.open();
 });
 
-events.on(EventState.CARD_BTN_CLICK, (product: IProduct) => {
+events.on(EventState.BUY_CLICK, (product: IProduct) => {
   cartModel.checkProductInCartById(product.id) === false
             ? cartModel.addToCart(product)
             : cartModel.removeFromCart(product);
@@ -85,8 +87,6 @@ events.on(EventState.CARD_BTN_CLICK, (product: IProduct) => {
 });
 
 events.on(EventState.CART_CHANGED, () => {
-  console.log('список из корзины', cartModel.getListFromCart());
-
   const selectedProductCard = productsCatalog.getSelectedProduct();
   const counter = cartModel.getTotalCartCount();
   const updTextButton = {
@@ -124,23 +124,18 @@ events.on(EventState.CART_OPEN, () => {
       listOfPosition: [],
       summ: cartModel.getTotalCartCost(),
       statusButton: !Boolean(cartModel.getTotalCartCost())
-    }) })
+    })});
   };
 
   modal.open();
 });
 
 events.on(EventState.PRODUCT_REMOVE, (product: IProduct) => {
-  console.log('удаляемый продукт', product);
   cartModel.removeFromCart(product);
 });
 
 events.on(EventState.ORDER_START, () => {
-  console.log('заказываем');
-
-
-  modal.render({ content: FormOrder.render() });
-
+  modal.render({ content: formOrder.render() });
 });
 
 events.on(EventState.FORM_EDIT, (formInformation: Partial<IBuyer>) => {
@@ -148,39 +143,71 @@ events.on(EventState.FORM_EDIT, (formInformation: Partial<IBuyer>) => {
 });
 
 events.on(EventState.BUYER_CAHAGED, (buyer) => {
-  FormOrder.render(buyer);
-  console.log(buyer);
-})
+  const errors = buyerModel.validationOrderInformation();
+  const { payment, address } = errors;
+  const errorsFromOrderForm = { payment, address };
+  const statusButton = !Object.values(errorsFromOrderForm).every((elem) => elem === null);
+  const formRenderObject = {
+    ...buyer,
+    errors: errorsFromOrderForm,
+    statusButton
+  };
 
+  formOrder.render(formRenderObject);
+});
 
+events.on(EventState.ORDER_SUBMIT, () => {
+  const errors = buyerModel.validationOrderInformation();
+  if (!Object.values(errors).every((elem) => elem === null)) {
+    modal.render({ content: formContacts.render() });
+  } else {
+    const items = cartModel.getListFromCart().map((product: IProduct) => product.id);
+    const orderInfoOnServerObj = {
+      ...buyerModel.getOrderInformation(),
+      total: cartModel.getTotalCartCost(),
+      items
 
+    };
+    (async () => {
+      try {
+        const responseFromServer: TResponseFromSerever = await communicationApi.postOrderOnServer(orderInfoOnServerObj);
+        events.emit(EventState.ORDER_SUCCESS, responseFromServer);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  };
+});
 
+events.on(EventState.CONTACT_CAHAGED, (info) => {
+  const errors = buyerModel.validationOrderInformation();
+  const { email, phone } = errors;
+  const errorsFromContactsForm = { email, phone };
+  const statusButton = !Object.values(errorsFromContactsForm).every((elem) => elem === null);
+  const formRenderObject = {
+    ...info,
+    errors: errorsFromContactsForm,
+    statusButton
+  };
 
+  formContacts.render(formRenderObject);
+});
+
+events.on(EventState.ORDER_SUCCESS, (respose: TResponseFromSerever) => {
+  const summ = { summ: respose.total };
+  modal.render({ content: success.render(summ) });
+  cartModel.clearCart();
+  buyerModel.clearOrderInformation();
+});
+
+events.on(EventState.CART_CLEARED, () => {
+  const counter = cartModel.getTotalCartCount();
+  header.render( { counter } );
+});
 
 events.on(EventState.MODAL_CLOSE, () => {;
   modal.close();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Запрос данных с сервера */
 try {
@@ -189,10 +216,3 @@ try {
 } catch (error) {
   console.error(error);
 };
-
-
-
-// DOM_ELEMENTS.main.replaceChildren(modal.render({buttonText: 'Заказать'}));
-
-
-

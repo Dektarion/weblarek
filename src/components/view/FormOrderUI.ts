@@ -5,16 +5,12 @@ import { EventState } from "../../utils/constants.ts";
 
 export class FormOrderUI extends Form {
   protected _btnContainer: HTMLButtonElement[];
-  protected _cardButtonElement: HTMLButtonElement;
-  protected _cashButtonElement: HTMLButtonElement;
   protected _adressInputElement: HTMLInputElement;
 
   constructor(protected event: IEvents, container: HTMLElement) {
     super(event, container);
 
     this._btnContainer = ensureAllElements<HTMLButtonElement>('[type="button"]', this.container);
-    this._cardButtonElement = ensureElement<HTMLButtonElement>('[name="card"]', this.container);
-    this._cashButtonElement = ensureElement<HTMLButtonElement>('[name="cash"]', this.container);
     this._adressInputElement = ensureElement<HTMLInputElement>('[name="address"]', this.container);
 
     this._btnContainer.forEach((btn) => {

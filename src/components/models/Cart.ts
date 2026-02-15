@@ -23,6 +23,7 @@ export class Cart {
 
 	clearCart(): void {
 		this._purchaseProductList.length = 0;
+		this.event.emit(EventState.CART_CLEARED);
 	};
 
 	getTotalCartCost(): number {

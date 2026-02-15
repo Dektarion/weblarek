@@ -11,12 +11,22 @@ export class Buyer {
     constructor(protected event: IEvents) {};
 
     setOrderInformation(orderInfo: Partial<IBuyer>): void {
-        if (orderInfo.payment !== undefined) this._payment = orderInfo.payment;
-        if (orderInfo.email !== undefined) this._email = orderInfo.email;
-        if (orderInfo.phone !== undefined) this._phone = orderInfo.phone;
-        if (orderInfo.address !== undefined) this._address = orderInfo.address;
-
-        this.event.emit(EventState.BUYER_CAHAGED, this.getOrderInformation());
+        if (orderInfo.payment !== undefined) {
+            this._payment = orderInfo.payment;
+            this.event.emit(EventState.BUYER_CAHAGED, this.getOrderInformation());
+        };
+        if (orderInfo.address !== undefined) {
+            this._address = orderInfo.address;
+            this.event.emit(EventState.BUYER_CAHAGED, this.getOrderInformation());
+        };
+        if (orderInfo.email !== undefined) {
+            this._email = orderInfo.email;
+            this.event.emit(EventState.CONTACT_CAHAGED, this.getOrderInformation());
+        };
+        if (orderInfo.phone !== undefined) {
+            this._phone = orderInfo.phone;
+            this.event.emit(EventState.CONTACT_CAHAGED, this.getOrderInformation());
+        };
     };
 
     getOrderInformation(): IBuyer {
@@ -33,6 +43,8 @@ export class Buyer {
         this._email = '';
         this._phone = '';
         this._address = '';
+        this.event.emit(EventState.BUYER_CAHAGED, this.getOrderInformation());
+        this.event.emit(EventState.CONTACT_CAHAGED, this.getOrderInformation());
     };
 
 

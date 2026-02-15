@@ -12,4 +12,5 @@ export const DOM_ELEMENTS = {
   productInCartTemplate: document.querySelector('#card-basket') as HTMLTemplateElement,
   formOrder: document.querySelector('#order') as HTMLTemplateElement,
   formContacts: document.querySelector('#contacts') as HTMLTemplateElement,
+  successful: document.querySelector('#success') as HTMLTemplateElement,
 } as const;

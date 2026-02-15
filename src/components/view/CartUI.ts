@@ -3,7 +3,7 @@ import { Component } from "../base/Component.ts";
 import { IEvents } from "../base/Events.ts";
 import { EventState, priceLabelsForCards } from "../../utils/constants.ts";
 
-interface ICartData {
+export interface ICartData {
   listOfPosition: HTMLElement[],
   summ: number,
   statusButton: boolean
