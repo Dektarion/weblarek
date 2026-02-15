@@ -21,11 +21,11 @@ export class Buyer {
         };
         if (orderInfo.email !== undefined) {
             this._email = orderInfo.email;
-            this.event.emit(EventState.CONTACT_CAHAGED, this.getOrderInformation());
+            this.event.emit(EventState.CONTACT_CHANGED, this.getOrderInformation());
         };
         if (orderInfo.phone !== undefined) {
             this._phone = orderInfo.phone;
-            this.event.emit(EventState.CONTACT_CAHAGED, this.getOrderInformation());
+            this.event.emit(EventState.CONTACT_CHANGED, this.getOrderInformation());
         };
     };
 
@@ -44,7 +44,7 @@ export class Buyer {
         this._phone = '';
         this._address = '';
         this.event.emit(EventState.BUYER_CAHAGED, this.getOrderInformation());
-        this.event.emit(EventState.CONTACT_CAHAGED, this.getOrderInformation());
+        this.event.emit(EventState.CONTACT_CHANGED, this.getOrderInformation());
     };
 
 

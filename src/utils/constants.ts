@@ -35,7 +35,6 @@ export const btnTextForModalCard = {
 export enum EventState {
   CART_OPEN = 'cart:open',
   CART_CHANGED = 'cart:changed',
-  CART_CLEARED = 'cart:cleared',
   CATALOG_CHANGED = 'catalog:changed',
   CARD_SELECTED = 'card:selected',
   SELECTED_CARD_SAVE = 'selected-card:save',
@@ -46,6 +45,5 @@ export enum EventState {
   FORM_EDIT = 'form:edit',
   ORDER_SUBMIT = 'order:submit',
   BUYER_CAHAGED = 'buyer:changed',
-  CONTACT_CAHAGED = 'contact:changed',
-  ORDER_SUCCESS = 'order:success',
+  CONTACT_CHANGED = 'contact:changed',
 };

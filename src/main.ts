@@ -33,7 +33,7 @@ const buyerModel = new Buyer(events);
 const cartModel = new Cart(events);
 
 const header = new HeaderUI(events, DOM_ELEMENTS.header);
-const main = new MainGalleryUI(DOM_ELEMENTS.main);
+const main = new MainGalleryUI(DOM_ELEMENTS.page);
 const modal = new ModalUI(events, DOM_ELEMENTS.modal);
 const cart = new CartUI(events, cloneTemplate(DOM_ELEMENTS.cart));
 
@@ -95,13 +95,13 @@ events.on(EventState.CART_CHANGED, () => {
   };
 
   const productListInCart = cartModel.getListFromCart();
-  const productListInCartArr = productListInCart.map((product: IProduct) => {
+  const productListInCartArr = productListInCart.map((product: IProduct, index) => {
     const productInCart = new ProductInCartUI(cloneTemplate(DOM_ELEMENTS.productInCartTemplate), {
       onClick: () => events.emit(EventState.PRODUCT_REMOVE, product)
     });
     const productCard = {
       ...product,
-      index: productListInCart.indexOf(product) + 1,
+      index: index + 1,
     };
     return productInCart.render(productCard);
   });
@@ -119,14 +119,7 @@ events.on(EventState.CART_CHANGED, () => {
 });
 
 events.on(EventState.CART_OPEN, () => {
-  if (cartModel.getTotalCartCount() === 0) {
-    modal.render({ content: cart.render({
-      listOfPosition: [],
-      summ: cartModel.getTotalCartCost(),
-      statusButton: !Boolean(cartModel.getTotalCartCost())
-    })});
-  };
-
+  modal.render({ content: cart.render() });
   modal.open();
 });
 
@@ -166,12 +159,13 @@ events.on(EventState.ORDER_SUBMIT, () => {
       ...buyerModel.getOrderInformation(),
       total: cartModel.getTotalCartCost(),
       items
-
     };
     (async () => {
       try {
         const responseFromServer: TResponseFromSerever = await communicationApi.postOrderOnServer(orderInfoOnServerObj);
-        events.emit(EventState.ORDER_SUCCESS, responseFromServer);
+          cartModel.clearCart();
+          buyerModel.clearOrderInformation();
+          modal.render({ content: success.render({summ: responseFromServer.total}) });
       } catch (error) {
         console.error(error);
       }
@@ -179,7 +173,7 @@ events.on(EventState.ORDER_SUBMIT, () => {
   };
 });
 
-events.on(EventState.CONTACT_CAHAGED, (info) => {
+events.on(EventState.CONTACT_CHANGED, (info) => {
   const errors = buyerModel.validationOrderInformation();
   const { email, phone } = errors;
   const errorsFromContactsForm = { email, phone };
@@ -191,18 +185,6 @@ events.on(EventState.CONTACT_CAHAGED, (info) => {
   };
 
   formContacts.render(formRenderObject);
-});
-
-events.on(EventState.ORDER_SUCCESS, (respose: TResponseFromSerever) => {
-  const summ = { summ: respose.total };
-  modal.render({ content: success.render(summ) });
-  cartModel.clearCart();
-  buyerModel.clearOrderInformation();
-});
-
-events.on(EventState.CART_CLEARED, () => {
-  const counter = cartModel.getTotalCartCount();
-  header.render( { counter } );
 });
 
 events.on(EventState.MODAL_CLOSE, () => {;

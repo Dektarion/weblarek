@@ -1,7 +1,6 @@
 import { ensureElement } from "../../utils/utils.ts";
 import { Component } from "../base/Component.ts";
 import { IEvents } from "../base/Events.ts";
-import { EventState } from "../../utils/constants.ts";
 
 interface IModalData {
   content: HTMLElement;
@@ -18,11 +17,11 @@ export class ModalUI extends Component<IModalData> {
     this._modalContent = ensureElement<HTMLElement>('.modal__content', this.container);
 
     this.container.addEventListener('click', (event) => {
-      if (event.target === this.container) this.event.emit(EventState.MODAL_CLOSE);
+      if (event.target === this.container) this.close();
     });
 
     this._closeButton.addEventListener('click', () => {
-      this.event.emit(EventState.MODAL_CLOSE);
+      this.close();
     });
   };
 

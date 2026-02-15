@@ -11,7 +11,7 @@ export class MainGalleryUI extends Component<IMainGalleryData> {
   constructor(container: HTMLElement) {
     super(container);
 
-    this._galleryElement = ensureElement<HTMLElement>('.gallery');
+    this._galleryElement = ensureElement<HTMLElement>('.gallery', this.container);
   };
 
   set catalog(items: HTMLElement[]) {

@@ -4,7 +4,7 @@
 export const DOM_ELEMENTS = {
   wrapper: document.querySelector('.page__wrapper') as HTMLElement,
   header: document.querySelector('.header') as HTMLElement,
-  main: document.querySelector('.gallery') as HTMLElement,
+  page: document.querySelector('.page__wrapper') as HTMLElement,
   modal: document.querySelector('.modal') as HTMLDivElement,
   cardGalleryTemplate: document.querySelector('#card-catalog') as HTMLTemplateElement,
   cardPreviewTemplate: document.querySelector('#card-preview') as HTMLTemplateElement,
