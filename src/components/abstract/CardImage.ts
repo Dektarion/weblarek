@@ -26,6 +26,6 @@ export class CardImage extends Card<TCardGalleryProps> {
   };
 
   set image(value: string) {
-    this.setImage(this._imageElement, `${CDN_URL}${value.replace('.svg', '.png')}`, this._titleElement.textContent);
+    this.setImage(this._imageElement, `${CDN_URL}${value.replace('.svg', '.png')}`, this._titleElement.textContent as string);
   };
 };
